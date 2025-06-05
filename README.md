@@ -5,7 +5,7 @@ This script retrieves audit events from a given API, supports date filtering, an
 ## Features
 
 - Retrieves audit events via a REST API
-- Supports filtering events by date range (`--from_date` and `--to_date`)
+- Supports filtering events by date range (`--from_date` and `--to_date`). This is not necessary, if left blank it will search through all events.
 - Supports mult-threading (`--thread_count`) with a minimum of 1 and maximum of 7. Defaults to 4 if not specified.
 - Handles pagination via `links` field in the API response
 - Outputs events to a `audit_events.csv` file
@@ -23,6 +23,14 @@ pip install -r requirements.txt
 
 ```bash
 python audit_fetcher.py --from_date 01/01/2024 --to_date 06/01/2024
+```
+OR
+```bash
+python audit_fetcher.py 
+```
+OR
+```bash
+python audit_fetcher.py --thread_count 2
 ```
 
 Dates must be in either `MM/DD/YY` or `MM/DD/YYYY` format.
