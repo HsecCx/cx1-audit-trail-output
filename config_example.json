@@ -1,0 +1,6 @@
+{
+    "api_url": "https://<subdomain>.ast.checkmarx.net/api",
+    "iam_url": "https:/<subdomain>.iam.checkmarx.net/auth/realms/",
+    "api_key": "<apikey>",
+    "tenant_name": "<tenant_name>"
+}
