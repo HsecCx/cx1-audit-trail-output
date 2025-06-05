@@ -1,13 +1,13 @@
 import requests,json
 from pathlib import Path
 
-def load_config(config_file=Path("config.json").resolve()):
+def load_config(config_file=Path("config.json"))-> dict:
     """Loads configuration values from a JSON file."""
     
     with open(config_file, "r") as file:
         return json.load(file)
 
-def generate_oauth_token(config):
+def generate_oauth_token(config: dict) -> str:
     """
     Generates an OAuth token using the provided API key.
 

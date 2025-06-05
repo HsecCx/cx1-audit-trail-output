@@ -1,8 +1,6 @@
 import os
 import csv
 from typing import List, Dict, Any
-import ast
-import json
 
 class AuditUtils:
     
@@ -45,7 +43,7 @@ class AuditUtils:
             processed_rows.append(new_row)
         base_keys = list(json_list[0].keys())
         breakout_keys = ["details_id", "details_status", "details_username"]
-        fieldnames = base_keys + [k for k in breakout_keys if k not in base_keys]
+        fieldnames = sorted(set().union(*(row.keys() for row in processed_rows)))
         # Ensure the target folder exists
         if not os.path.exists(self.default_save_folder):
             os.makedirs(self.default_save_folder)
