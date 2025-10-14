@@ -174,3 +174,6 @@ cython_debug/
 .pypirc
 config.json
 audit_events_output/audit_events.csv
+config*
+!config_example.json
+*.xlsx
