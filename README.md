@@ -4,13 +4,12 @@ Retrieves audit events and scan results from Checkmarx One API. Outputs data to 
 
 ## Features
 
-- **Combined Data Collection**: Fetches both audit events and scan results in a single operation
-- **Flexible Date Filtering**: Supports MM/DD/YY and MM/DD/YYYY formats with RFC3339 API filtering
-- **Multiple Output Formats**: CSV (separate files) or Excel (multi-worksheet)
-- **Advanced Excel Output**: Separate worksheets per scan engine with extracted metadata fields
-- **Multithreading**: Configurable thread count (1-7) for efficient API calls
-- **Smart Defaults**: Last 30 days (including today) when no dates specified
-- **Error Handling**: Graceful handling of file permissions and API errors
+- Retrieves audit events via a REST API
+- Supports filtering events by date range (`--from_date` and `--to_date`). This is not necessary, if left blank it will search through all events.
+- Supports mult-threading (`--thread_count`) with a minimum of 1 and maximum of 7. Defaults to 4 if not specified.
+- Handles pagination via `links` field in the API response
+- Outputs events to a `audit_events.csv` file
+- Generates `curl` equivalents for debugging or replaying API calls
 
 ## Installation
 
@@ -39,6 +38,14 @@ Create `config.json` in the root directory:
 Fetches both audit events and scan results for the last 30 days (including today) as Excel:
 ```bash
 python run.py
+```
+OR
+```bash
+python audit_fetcher.py 
+```
+OR
+```bash
+python audit_fetcher.py --thread_count 2
 ```
 
 ### Custom Date Range
@@ -178,58 +185,4 @@ python run.py scan --limit 100 --offset 0
 python run.py scan --limit 5000 --thread_count 6 --output csv
 ```
 
-### Analysis Scenarios
-```bash
-# Monthly security report
-python run.py --from_date "11/01/2024" --to_date "11/30/2024" --output excel
-
-# Troubleshoot recent scan issues
-python run.py scan --limit 50 --output excel
-
-# Full historical collection
-python run.py --from_date "01/01/2024" --thread_count 7 --limit 10000
-```
-
-## Troubleshooting
-
-### Common Issues
-
-**No data returned**: 
-- Verify date range contains activity
-- Check API permissions for audit and scan endpoints
-- Confirm tenant configuration
-
-**Excel save failures**:
-- Close Excel files before running
-- Check write permissions in output directory
-- Use `--output csv` as alternative
-
-**API authentication errors**:
-- Verify `api_key` in `config.json`
-- Check `iam_url` and `api_url` are correct for your environment
-- Ensure API key has required permissions
-
-**Performance issues**:
-- Reduce `--limit` for scan results
-- Lower `--thread_count` if API throttling occurs
-- Use CSV output for very large datasets
-
-### Debug Mode
-Add debug logging by examining the console output for:
-- Sample scan fields and data structure
-- API request URLs being called
-- Progress indicators for threading operations
-
-## Output File Naming
-
-Files are automatically named with your tenant name and date ranges when specified:
-- `[tenant]_cx1_data_01-01-2024_to_02-01-2024.xlsx`
-- `[tenant]_audit_events_01-01-2024_to_02-01-2024.csv`
-- `[tenant]_scan_results_01-01-2024_to_02-01-2024.csv`
-
-Without date ranges:
-- `[tenant]_cx1_data.xlsx`
-- `[tenant]_audit_events.csv`
-- `[tenant]_scan_results.csv`
-
-*Note: `[tenant]` is replaced with your actual tenant name from config.json*
+This will retrieve all audit events between May 1st and June 1st, 2024, and save them to `audit_events.csv`.
